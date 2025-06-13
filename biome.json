@@ -1,0 +1,70 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.8.0/schema.json",
+  "formatter": {
+    "enabled": true,
+    "formatWithErrors": false,
+    "lineEnding": "crlf",
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 150
+  },
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded",
+      "quoteStyle": "double",
+      "trailingCommas": "none",
+      "arrowParentheses": "asNeeded",
+      "bracketSameLine": false
+    }
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": true,
+      "nursery": {
+        "useSortedClasses": {
+          "fix": "safe",
+          "level": "warn"
+        }
+      },
+      "correctness": {
+        "noChildrenProp": "off",
+        "useExhaustiveDependencies": "off",
+        "noUnusedImports": "error",
+        "noEmptyPattern": "off"
+      },
+      "a11y": {
+        "useValidAnchor": "off",
+        "useAnchorContent": "off",
+        "useAltText": "off",
+        "noLabelWithoutControl": "off",
+        "noSvgWithoutTitle": "off",
+        "useButtonType": "off",
+        "useKeyWithClickEvents": "off",
+        "useSemanticElements": "off"
+      },
+      "style": {
+        "useTemplate": "off",
+        "useSelfClosingElements": "off",
+        "noNonNullAssertion": "off",
+        "noUselessElse": "off",
+        "noUnusedTemplateLiteral": "off",
+        "noParameterAssign": "off",
+        "useExponentiationOperator": "off"
+      },
+      "complexity": {
+        "noStaticOnlyClass": "off",
+        "noForEach": "off",
+        "noBannedTypes": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "off",
+        "noArrayIndexKey": "off",
+        "noConfusingVoidType": "off"
+      }
+    }
+  },
+  "files": {
+    "ignore": ["dist", "**/tsconfig*.json", "src/assets/fonts"]
+  }
+}

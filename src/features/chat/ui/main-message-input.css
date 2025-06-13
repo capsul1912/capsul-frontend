@@ -1,0 +1,12 @@
+.main-message-input .ProseMirror {
+  @apply max-h-56 min-h-[40px] w-full overflow-auto p-2 text-gray-800 !ring-0 focus:outline-none dark:text-gray-200;
+}
+
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  font-size: 0.875rem;
+  height: 0;
+  pointer-events: none;
+}
