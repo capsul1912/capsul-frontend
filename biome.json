@@ -3,7 +3,7 @@
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
-    "lineEnding": "crlf",
+    "lineEnding": "lf",
     "indentStyle": "space",
     "indentWidth": 2,
     "lineWidth": 150

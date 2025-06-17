@@ -3,8 +3,8 @@ import InboxLayout from "@/layouts/inbox-layout.tsx"
 import MainLayout from "@/layouts/main-layout.tsx"
 import AccountPage from "@/pages/account-page"
 import AccountPage1 from "@/pages/account-page/old-index.tsx"
+import { LoginPage } from "@/pages/auth-login-page"
 import SetNewPassword from "@/pages/auth/change-password"
-import LoginPagePrevious from "@/pages/auth/login-page-previous"
 import ResetPasswordPage from "@/pages/auth/reset-password-page.tsx"
 import SignupPage from "@/pages/auth/signup-page"
 import VerifyEmailPage from "@/pages/auth/verify-email-page.tsx"
@@ -96,7 +96,8 @@ const routes: RouteObject[] = [
     ]
   },
   // { path: "/login", element: <LoginPage /> },
-  { path: "/login", element: <LoginPagePrevious /> },
+  // { path: "/login", element: <LoginPagePrevious /> },
+  { path: "/login", element: <LoginPage /> },
   { path: "/reset-password", element: <ResetPasswordPage /> },
   { path: "/change-password", element: <SetNewPassword /> },
   { path: "/verify-key/:key", element: <VerifyEmailPage /> },
