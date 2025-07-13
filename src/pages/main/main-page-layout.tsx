@@ -92,7 +92,7 @@ function MainPageLayout() {
 
   return (
     <div className="flex min-h-screen bg-white dark:bg-black">
-      <div className="fixed top-0 left-0 flex h-screen w-52 flex-col justify-between border-gray-20 border-r">
+      <div className="fixed top-0 left-1/2 flex h-screen w-52 flex-col justify-between border-gray-20 border-r bg-gray-50">
         <div className="flex items-center justify-between p-10">
           <div className="flex items-center gap-2">
             <Logo />

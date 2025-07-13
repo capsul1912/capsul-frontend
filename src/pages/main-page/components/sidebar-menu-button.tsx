@@ -1,11 +1,14 @@
 import type { ITicket } from "@/entities/ticket/types.ts"
 import { useChatStore } from "@/features/chat/model/chat.store"
-import { CustomEllipsisIcon } from "@/shared/icons"
-import { cn } from "@/shared/lib/utils"
+import { colors } from "@/shared/theme"
 import { Avatar, AvatarFallback } from "@/shared/ui/avatar.tsx"
 import { Checkbox } from "@/shared/ui/checkbox.tsx"
 import Identicon from "@/shared/ui/identicon.tsx"
-import { SidebarMenuButton, SidebarMenuItem } from "@/shared/ui/sidebar.tsx"
+import ListItemButton from "@mui/material/ListItemButton"
+import Paper from "@mui/material/Paper"
+import Stack from "@mui/material/Stack"
+import Typography from "@mui/material/Typography"
+import { darken } from "@mui/material/styles"
 import { formatDistanceToNow } from "date-fns"
 import { useState } from "react"
 import { useNavigate, useSearchParams } from "react-router-dom"
@@ -30,64 +33,58 @@ export function SessionCardItem({ chat }: IProps) {
   const isActive = searchParams.get("ticketId") === chat.id
 
   return (
-    <SidebarMenuItem
-      className="mt-1 border-[#DEE0E3] border-b hover:rounded-xl"
-      onMouseEnter={() => {
-        setHover(true)
-      }}
-      onMouseLeave={() => {
-        setHover(false)
+    <ListItemButton
+      component={Paper}
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      sx={[
+        theme => ({
+          height: "auto",
+          borderRadius: 2,
+          // boxShadow: "",
+          padding: theme.spacing(1),
+          backgroundColor: isActive ? colors.common.white : "transparent",
+          borderColor: isActive ? undefined : "transparent",
+          boxShadow: isActive || isHover ? undefined : "0",
+          cursor: "pointer"
+        }),
+        theme =>
+          theme.applyStyles("dark", {
+            backgroundColor: isActive ? darken(colors.primary[600], 0.5) : "transparent"
+          })
+      ]}
+      onClick={() => {
+        setCurrentTicket(chat)
+        navigate(`?ticketId=${chat.id}`, { replace: true })
       }}
     >
-      <SidebarMenuButton
-        className={cn(
-          "!border[#DEE0E3] group hover:!border-[#B4C7F8] h-auto rounded-xl border border-transparent px-1.5 hover:bg-[#F0F4FE]",
-          checked && "border-[#B4C7F8] bg-[#F0F4FE]",
-          isActive ? "group bg-[#4778F5] hover:bg-[#4778F5]" : ""
-        )}
-        onClick={() => {
-          setCurrentTicket(chat)
-          navigate(`?ticketId=${chat.id}`, { replace: true })
-        }}
-        asChild
-        data-active={isActive ? "active" : "inactive"}
-      >
-        <button className="flex flex-col">
-          <div className="flex w-full items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Avatar className="size-8">
-                <AvatarFallback className="bg-white">
-                  {checked || isHover ? (
-                    <Checkbox checked={checked} onCheckedChange={() => setChecked(!checked)} className="rounded-[4px] border-[#DEE0E3]" />
-                  ) : (
-                    //     : index % 4 === 0 ? (
-                    //     <img src={avatarImage} alt="" className="size-8" />
-                    // )
-                    <Identicon value={chat.id} size={80} />
-                  )}
-                </AvatarFallback>
-              </Avatar>
-              <p className={`font-semibold text-[#6F6D74] text-sm ${isActive ? "group-data-[active]:text-white" : ""}`}>
-                {chat.session_name || chat.session_email}
-              </p>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className={`text-[#14151A] text-[10px] ${isActive ? "group-data-[active]:text-white" : ""}`}>
-                {formatDistanceToNow(new Date(chat.updated_at), {
-                  addSuffix: true
-                })}
-              </div>
-              <button>
-                <CustomEllipsisIcon className="size-4 group-data-[active]:*:fill-white" />
-              </button>
-            </div>
-          </div>
-          <div className={`flex w-full flex-grow items-center truncate text-ellipsis text-[#696D7C] text-xs ${isActive ? "text-white" : ""}`}>
-            {/*<MessageCircleMore className="mr-1 size-4 min-w-4" />*/}
-            {chat.last_message?.content}
-          </div>
-        </button>
-      </SidebarMenuButton>
-    </SidebarMenuItem>
+      <Stack gap={1} width="100%">
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Stack direction="row" alignItems="center" gap={1}>
+            <Avatar className="size-8">
+              <AvatarFallback className="bg-white">
+                {checked || isHover ? (
+                  <Checkbox checked={checked} onCheckedChange={() => setChecked(!checked)} className="rounded-[4px] border-[#DEE0E3]" />
+                ) : (
+                  //     : index % 4 === 0 ? (
+                  //     <img src={avatarImage} alt="" className="size-8" />
+                  // )
+                  <Identicon value={chat.id} size={80} />
+                )}
+              </AvatarFallback>
+            </Avatar>
+            <Typography>{chat.session_name || chat.session_email}</Typography>
+          </Stack>
+          <Typography fontSize={12}>
+            {formatDistanceToNow(new Date(chat.updated_at), {
+              addSuffix: true
+            })}
+          </Typography>
+        </Stack>
+        <Typography fontSize={14} noWrap>
+          {chat.last_message?.content}
+        </Typography>
+      </Stack>
+    </ListItemButton>
   )
 }

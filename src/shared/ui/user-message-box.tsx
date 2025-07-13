@@ -2,6 +2,9 @@ import type { IMessage } from "@/entities/message/types.ts"
 import TypingEffect from "@/features/typing-effect"
 import { cn } from "@/shared/lib/helpers"
 import { Button } from "@/shared/ui/button.tsx"
+import Box from "@mui/material/Box"
+import Stack from "@mui/material/Stack"
+import Typography from "@mui/material/Typography"
 import dayjs from "dayjs"
 import { Reply, User2Icon } from "lucide-react"
 import { forwardRef, useState } from "react"
@@ -47,28 +50,27 @@ const UserMessageBox = forwardRef<HTMLDivElement, IProps>(({ message, typing, ha
   //     : false;
 
   return (
-    <div ref={ref} className="group relative flex gap-2 px-4 text-sm">
+    <Stack
+      ref={ref}
+      direction="row"
+      gap={0.5}
+      px={1}
+      sx={{
+        fontSize: "0.875rem",
+        lineHeight: "1.25rem"
+      }}
+      className="group"
+    >
       <div className="flex max-w-[77%] gap-2 ">
-        {/*<div className="flex flex-shrink-0 items-center overflow-hidden rounded-full border border-solid border-gray-200 bg-white p-1">*/}
         <User2Icon className="mx-auto size-8 rounded-full border bg-white p-1.5" />
-        {/*<Identicon value={message?.id || ''} size={80} className="size-8 border rounded-full" />*/}
-        {/*<img src={avatarImage} alt="" className="size-8" />*/}
-        {/*</div>*/}
-        <div className="relative rounded-2xl rounded-tl-none bg-bg-light p-5 pb-7 text-[#14151A]">
-          {typing ? temp ? <ReactMarkdown>{temp}</ReactMarkdown> : <TypingEffect /> : <ReactMarkdown>{message?.content}</ReactMarkdown>}
-          {/*{messageObj?.need_operator ? (*/}
-          {/*    <Badge*/}
-          {/*        variant="secondary"*/}
-          {/*        className={cn(*/}
-          {/*            `absolute right-2 top-2 size-3 rounded-full bg-red-500 p-0`,*/}
-          {/*            isResolved ? 'bg-green-400' : ''*/}
-          {/*        )}*/}
-          {/*    />*/}
-          {/*) : (*/}
-          {/*    ''*/}
-          {/*)}*/}
-          <span className="absolute right-2 bottom-1 text-gray-300 text-xs">{timestamp ? dayjs(timestamp).format("HH:mm") : ""}</span>
-        </div>
+        <Box sx={[theme => ({})]}>
+          <div className="relative rounded-2xl rounded-tl-none bg-bg-light p-5 pb-7 text-[#14151A]">
+            {typing ? temp ? <ReactMarkdown>{temp}</ReactMarkdown> : <TypingEffect /> : <ReactMarkdown>{message?.content}</ReactMarkdown>}
+            <Typography fontSize={12} color="textDisabled" sx={{ position: "absolute", bottom: 4, right: 8 }}>
+              {timestamp ? dayjs(timestamp).format("HH:mm") : ""}
+            </Typography>
+          </div>
+        </Box>
       </div>
       <div className="flex w-[120px] items-center">
         <Button
@@ -82,7 +84,7 @@ const UserMessageBox = forwardRef<HTMLDivElement, IProps>(({ message, typing, ha
           <Reply className="size-5" />
         </Button>
       </div>
-    </div>
+    </Stack>
   )
 })
 

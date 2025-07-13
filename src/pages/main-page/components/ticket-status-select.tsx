@@ -1,7 +1,7 @@
 import type { ITicketStatus } from "@/entities/ticket/types.ts"
 import { StatusDot } from "@/shared/icons"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/select"
-import { useTicketsStore } from "@/widgets/menu-sidebar/model/store.ts"
+import { useTicketsStore } from "@/widgets/inbox-layout/model/store.ts"
 import { useId } from "react"
 
 export default function TicketStatusSelect() {

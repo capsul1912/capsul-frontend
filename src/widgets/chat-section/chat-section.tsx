@@ -1,13 +1,17 @@
 import type { IMessageSender, IMessageType } from "@/entities/message/types.ts"
 import { useUpdateTicket } from "@/entities/ticket/api/use-update-tickets"
 import { useChatStore } from "@/features/chat/model/chat.store.ts"
-import ChatHeader from "@/features/chat/ui/chat-header.tsx"
 import { EmptyChatMessage } from "@/features/chat/ui/empty-chat-message.tsx"
 import MessageInput from "@/features/chat/ui/message-input.tsx"
 import { MessageRenderer } from "@/features/chat/ui/message-renderer.tsx"
 import { BlurredLoading } from "@/features/loadings"
 import { useAuthStore } from "@/shared/lib/store/auth-store.ts"
+import { colors } from "@/shared/theme"
 import { Button } from "@/shared/ui/button.tsx"
+import Paper from "@mui/material/Paper"
+import Stack from "@mui/material/Stack"
+import Typography from "@mui/material/Typography"
+import { darken, lighten } from "@mui/material/styles"
 import { useEffect, useMemo } from "react"
 import { useParams } from "react-router-dom"
 import useWebSocket, { ReadyState } from "react-use-websocket"
@@ -35,7 +39,8 @@ export function ChatSection() {
   // WebSocket
   const socketUrl = useMemo(() => {
     if (!currentTicket) return null
-    return `wss://agent.usechai.com/ws/ws/${projectId}/${currentTicket.id}`
+    // return `wss://agent.usechai.com/ws/ws/${projectId}/${currentTicket.id}`
+    return `ws://127.0.0.1:8001/ws/${projectId}/${currentTicket.id}`
   }, [currentTicket])
 
   const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket<IChatMessage>(
@@ -117,8 +122,41 @@ export function ChatSection() {
   }
 
   return (
-    <div className="relative flex h-full flex-grow flex-col items-center bg-background">
-      <ChatHeader />
+    <Stack
+      component={Paper}
+      sx={[
+        theme => ({
+          backgroundColor: lighten(colors.primary[50], 0.8),
+          height: "100%",
+          borderRadius: 4
+        }),
+        theme =>
+          theme.applyStyles("dark", {
+            backgroundColor: darken(colors.primary[900], 0.75)
+          })
+      ]}
+    >
+      <Stack
+        justifyContent="center"
+        sx={[
+          theme => ({
+            height: theme.spacing(7),
+            py: theme.spacing(1),
+            px: theme.spacing(2),
+            borderBottomWidth: 1,
+            borderBottomStyle: "solid",
+            borderBottomColor: colors.primary[100]
+          }),
+          theme =>
+            theme.applyStyles("dark", {
+              borderBottomColor: darken(colors.primary[600], 0.5)
+            })
+        ]}
+      >
+        <Typography fontSize={20} fontWeight={500} ml={1}>
+          Messenger
+        </Typography>
+      </Stack>
       {currentTicket ? (
         <>
           <MessageRenderer />
@@ -126,7 +164,7 @@ export function ChatSection() {
             <Button onClick={handleAssignTicket} disabled={isUpdating} className="m-4 bg-blue-500 text-white">
               {isUpdating ? "Assigning..." : "Assign"}
             </Button>
-          ) : currentTicket.assignee === user?.id ? (
+          ) : currentTicket.assignee !== user?.id ? (
             <MessageInput onSend={sendMessage} />
           ) : null}
         </>
@@ -138,6 +176,6 @@ export function ChatSection() {
         spinnerProps={{ className: "size-16 -mt-16" }}
         visible={chatLoading || isFetching || isUpdating}
       />
-    </div>
+    </Stack>
   )
 }

@@ -1,6 +1,6 @@
 import type { ITicketStatus } from "@/entities/ticket/types.ts"
-import type { IMainFilterType } from "@/widgets/menu-sidebar/ui/menu-sidebar.tsx"
 import { create } from "zustand"
+import type { IMainFilterType } from "../types"
 
 type ITicketsFilter = {
   teamId: number | null

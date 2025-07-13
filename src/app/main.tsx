@@ -1,10 +1,10 @@
 import "regenerator-runtime/runtime"
 import ReactDOM from "react-dom/client"
 import { BrowserRouter } from "react-router-dom"
-import App from "./app/app.tsx"
+import { App } from "./app.tsx"
 import "./index.css"
 import "./globals.css"
-import "./assets/fonts/Inter-4.1/web/inter.css"
+import "@/assets/fonts/Inter-4.1/web/inter.css"
 // import store from './app/store.ts';
 import LanguageProvider from "@/app/lang-provider.tsx"
 import store from "@/app/store.ts"
@@ -16,13 +16,13 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools"
 import React from "react"
 import { Provider } from "react-redux"
-import { ThemeProvider as TwThemeProvider } from "./app/context/theme-context.tsx"
+import { ThemeProvider as TwThemeProvider } from "./context/theme-context.tsx"
 
 import "@fontsource/roboto/300.css"
 import "@fontsource/roboto/400.css"
 import "@fontsource/roboto/500.css"
 import "@fontsource/roboto/700.css"
-import { ThemeProvider } from "./shared/theme/index.tsx"
+import { ThemeProvider } from "../shared/theme/index.tsx"
 
 Sentry.init({
   dsn: "https://2a2ae6cad590af5410b70af148f7577b@o4509110745825280.ingest.de.sentry.io/4509110759981136"

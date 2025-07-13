@@ -4,10 +4,10 @@ import { fakeCurrentSession } from "@/features/chat/fake/fake-data.ts"
 import { useChatStore } from "@/features/chat/model/chat.store.ts"
 import { ChatAutoScroll } from "@/features/chat/ui/chat-autoscroll.tsx"
 import MessageDate from "@/features/chat/ui/message-date.tsx"
+import { ClientMessageBubble } from "@/features/message-bubbles"
 import { getUserFromLS } from "@/shared/lib/helpers"
 import BotMessageBox from "@/shared/ui/bot-message-box.tsx"
 import OperatorMessage from "@/shared/ui/operator-message.tsx"
-import UserMessageBox from "@/shared/ui/user-message-box.tsx"
 import { type JSX, memo, useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 
@@ -35,10 +35,12 @@ export const MessageRenderer = memo(() => {
   // Functions
   const isAssigned = currentSession?.assigned_to === getUserFromLS()?.id
 
+  console.log(currentSession, getUserFromLS(), isAssigned)
+
   const renderMessage = (message: IMessage) => {
     const renderers: Record<IMessageSender, JSX.Element> = {
       CLIENT: (
-        <UserMessageBox
+        <ClientMessageBubble
           key={message.id}
           timestamp={message.created_at}
           isAssigned={isAssigned}
