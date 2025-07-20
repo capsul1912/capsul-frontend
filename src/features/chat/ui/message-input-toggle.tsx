@@ -1,34 +1,27 @@
-import { type IChatInputMode, useChatStore } from "@/features/chat/model/chat.store.ts"
-import { ToggleGroup, ToggleGroupItem } from "@/shared/ui/toggle-group.tsx"
-import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/tooltip.tsx"
+import { useChatStore } from "@/features/chat/model/chat.store.ts"
+import ToggleButton from "@mui/material/ToggleButton"
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup"
 
 export function MessageInputToggle() {
   const { messageMode, setMessageMode } = useChatStore()
 
   return (
-    <ToggleGroup
-      type="single"
+    <ToggleButtonGroup
+      size="small"
+      sx={{ mb: 1 }}
       value={messageMode}
-      onValueChange={val => val && setMessageMode(val as IChatInputMode)}
-      className="mb-2 inline-flex h-9 justify-start self-start rounded-lg bg-zinc-100 p-1"
+      onChange={(_, v) => setMessageMode(v)}
+      exclusive={true}
+      aria-label="Small sizes"
     >
-      <ToggleGroupItem value="reply" className="data-[state=on]:!bg-white z-[999!important] h-7">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>Reply</div>
-          </TooltipTrigger>
-          <TooltipContent className="z-[999!important]">The message will be sent as a chat message with email fallback.</TooltipContent>
-        </Tooltip>
-      </ToggleGroupItem>
-
-      <ToggleGroupItem value="note" className="data-[state=on]:!bg-white h-7">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <div>Note</div>
-          </TooltipTrigger>
-          <TooltipContent>Notes will be sent to the team only.</TooltipContent>
-        </Tooltip>
-      </ToggleGroupItem>
-    </ToggleGroup>
+      <ToggleButton value="reply" key="reply">
+        Reply
+        {/* The message will be sent as a chat message with email fallback. */}
+      </ToggleButton>
+      <ToggleButton value="note" key="note">
+        Note
+        {/* Notes will be sent to the team only. */}
+      </ToggleButton>
+    </ToggleButtonGroup>
   )
 }

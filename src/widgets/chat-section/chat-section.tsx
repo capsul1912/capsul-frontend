@@ -1,4 +1,6 @@
+import { messagesKeys } from "@/entities/message/api/use-fetch-messages"
 import type { IMessageSender, IMessageType } from "@/entities/message/types.ts"
+import { ticketsKeys } from "@/entities/ticket/api/use-fetch-tickets"
 import { useUpdateTicket } from "@/entities/ticket/api/use-update-tickets"
 import { useChatStore } from "@/features/chat/model/chat.store.ts"
 import { EmptyChatMessage } from "@/features/chat/ui/empty-chat-message.tsx"
@@ -6,12 +8,7 @@ import MessageInput from "@/features/chat/ui/message-input.tsx"
 import { MessageRenderer } from "@/features/chat/ui/message-renderer.tsx"
 import { BlurredLoading } from "@/features/loadings"
 import { useAuthStore } from "@/shared/lib/store/auth-store.ts"
-import { colors } from "@/shared/theme"
-import { Button } from "@/shared/ui/button.tsx"
-import Paper from "@mui/material/Paper"
-import Stack from "@mui/material/Stack"
-import Typography from "@mui/material/Typography"
-import { darken, lighten } from "@mui/material/styles"
+import { useQueryClient } from "@tanstack/react-query"
 import { useEffect, useMemo } from "react"
 import { useParams } from "react-router-dom"
 import useWebSocket, { ReadyState } from "react-use-websocket"
@@ -29,12 +26,12 @@ export interface IChatMessage {
   event: string
 }
 
-export function ChatSection() {
+export const ChatSection: React.FC = () => {
+  const queryClient = useQueryClient()
   // Store
   const { projectId } = useParams()
   const { currentTicket, chatLoading, isFetching, setMessages, messages } = useChatStore()
   const { user } = useAuthStore()
-  console.log("Current ticket:", currentTicket?.assignee)
 
   // WebSocket
   const socketUrl = useMemo(() => {
@@ -51,7 +48,19 @@ export function ChatSection() {
       retryOnError: true,
       onOpen: () => console.log("WebSocket opened"),
       onClose: () => console.log("WebSocket closed"),
-      onError: event => console.error("WebSocket error", event)
+      onError: event => console.error("WebSocket error", event),
+      onMessage: event => {
+        try {
+          const message = JSON.parse(event.data)
+
+          if (message.event === "message_sent") {
+            queryClient.invalidateQueries({ queryKey: messagesKeys.lists() })
+            queryClient.invalidateQueries({ queryKey: ticketsKeys.all })
+          }
+        } catch (e) {
+          console.error(e)
+        }
+      }
     },
     !!socketUrl
   )
@@ -85,6 +94,9 @@ export function ChatSection() {
   // Example function to send a message
   const sendMessage = (msg: Partial<IChatMessage>) => {
     if (readyState === ReadyState.OPEN) {
+      if (currentTicket?.assignee === null) {
+        handleAssignTicket()
+      }
       sendJsonMessage(msg)
     } else {
       console.warn("WebSocket is not open")
@@ -122,51 +134,11 @@ export function ChatSection() {
   }
 
   return (
-    <Stack
-      component={Paper}
-      sx={[
-        theme => ({
-          backgroundColor: lighten(colors.primary[50], 0.8),
-          height: "100%",
-          borderRadius: 4
-        }),
-        theme =>
-          theme.applyStyles("dark", {
-            backgroundColor: darken(colors.primary[900], 0.75)
-          })
-      ]}
-    >
-      <Stack
-        justifyContent="center"
-        sx={[
-          theme => ({
-            height: theme.spacing(7),
-            py: theme.spacing(1),
-            px: theme.spacing(2),
-            borderBottomWidth: 1,
-            borderBottomStyle: "solid",
-            borderBottomColor: colors.primary[100]
-          }),
-          theme =>
-            theme.applyStyles("dark", {
-              borderBottomColor: darken(colors.primary[600], 0.5)
-            })
-        ]}
-      >
-        <Typography fontSize={20} fontWeight={500} ml={1}>
-          Messenger
-        </Typography>
-      </Stack>
+    <>
       {currentTicket ? (
         <>
           <MessageRenderer />
-          {currentTicket.assignee === null ? (
-            <Button onClick={handleAssignTicket} disabled={isUpdating} className="m-4 bg-blue-500 text-white">
-              {isUpdating ? "Assigning..." : "Assign"}
-            </Button>
-          ) : currentTicket.assignee !== user?.id ? (
-            <MessageInput onSend={sendMessage} />
-          ) : null}
+          {currentTicket.assignee === null || currentTicket.assignee === user?.id ? <MessageInput onSend={sendMessage} /> : null}
         </>
       ) : (
         <EmptyChatMessage />
@@ -176,6 +148,6 @@ export function ChatSection() {
         spinnerProps={{ className: "size-16 -mt-16" }}
         visible={chatLoading || isFetching || isUpdating}
       />
-    </Stack>
+    </>
   )
 }

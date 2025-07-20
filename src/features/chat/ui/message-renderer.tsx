@@ -4,10 +4,8 @@ import { fakeCurrentSession } from "@/features/chat/fake/fake-data.ts"
 import { useChatStore } from "@/features/chat/model/chat.store.ts"
 import { ChatAutoScroll } from "@/features/chat/ui/chat-autoscroll.tsx"
 import MessageDate from "@/features/chat/ui/message-date.tsx"
-import { ClientMessageBubble } from "@/features/message-bubbles"
+import { MessageBubble } from "@/features/message-bubbles"
 import { getUserFromLS } from "@/shared/lib/helpers"
-import BotMessageBox from "@/shared/ui/bot-message-box.tsx"
-import OperatorMessage from "@/shared/ui/operator-message.tsx"
 import { type JSX, memo, useEffect } from "react"
 import { useSearchParams } from "react-router-dom"
 
@@ -40,7 +38,8 @@ export const MessageRenderer = memo(() => {
   const renderMessage = (message: IMessage) => {
     const renderers: Record<IMessageSender, JSX.Element> = {
       CLIENT: (
-        <ClientMessageBubble
+        <MessageBubble
+          sender="CLIENT"
           key={message.id}
           timestamp={message.created_at}
           isAssigned={isAssigned}
@@ -53,20 +52,22 @@ export const MessageRenderer = memo(() => {
         />
       ),
       AGENT: (
-        <BotMessageBox
+        <MessageBubble
+          sender="AGENT"
           key={message.id}
           timestamp={message.created_at}
           // typing={messageObj.loading}
-          message={message.content}
+          message={message}
         />
       ),
       OPERATOR: (
-        <OperatorMessage
+        <MessageBubble
+          sender="OPERATOR"
           key={message.id}
           timestamp={message.created_at}
           goToMessage={goToMessage}
           ref={el => addToReferences(el, message)}
-          messages={fetchedMessages}
+          // messages={fetchedMessages}
           message={message}
         />
       )

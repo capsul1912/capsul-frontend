@@ -14,7 +14,7 @@ export const InboxMain = styled(Box)<{ open: boolean }>(({ theme }) => [
     borderBottomLeftRadius: 16,
     borderRightWidth: 1,
     borderRightStyle: "solid",
-    borderRightColor: colors.primary[100],
+    borderRightColor: colors.primary[300],
     padding: theme.spacing(padding),
     width: width,
     flexShrink: 0,

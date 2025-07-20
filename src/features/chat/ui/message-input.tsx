@@ -1,20 +1,24 @@
 import { AudioRecorder } from "@/features/audio-recorder/ui/for-main-chat/audio-recorder.tsx"
 import { MessageInputToggle } from "@/features/chat/ui/message-input-toggle.tsx"
 import GifPicker from "@/features/gifs/ui/gif-picker.tsx"
-import { Button } from "@/shared/ui/button.tsx"
 import Image from "@tiptap/extension-image"
 import Placeholder from "@tiptap/extension-placeholder"
 import { EditorContent, useEditor } from "@tiptap/react"
 import StarterKit from "@tiptap/starter-kit"
-import { Paperclip, Send, X } from "lucide-react"
+import { X } from "lucide-react"
 import "./main-message-input.css"
 import { useMessageOptimisticUpdate } from "@/entities/message/api/use-send-message.ts"
 import { InputBubbleMenu } from "@/features/bubble-menu.tsx"
 import { useChatStore } from "@/features/chat/model/chat.store.ts"
 import { useAudio } from "@/shared/hooks"
 import { useAuthStore } from "@/shared/lib/store/auth-store.ts"
-import { cn } from "@/shared/lib/utils"
+import { colors } from "@/shared/theme"
 import type { IChatMessage } from "@/widgets/chat-section/chat-section.tsx"
+import AttachFileIcon from "@mui/icons-material/AttachFile"
+import Box from "@mui/material/Box"
+import Button from "@mui/material/Button"
+import IconButton from "@mui/material/IconButton"
+import Stack from "@mui/material/Stack"
 import { Dropcursor } from "@tiptap/extension-dropcursor"
 import { useEffect, useRef, useState } from "react"
 import sentSoundAudio from "/sounds/sent-sound.mp3"
@@ -188,78 +192,99 @@ export default function MessageInput({ onSend }: IProps) {
   if (!editor) return null
 
   return (
-    <div className="relative flex min-h-[195px] w-full justify-center">
-      <div className="absolute bottom-0 mx-auto mb-1 flex h-auto min-h-[190px] w-[90%] max-w-[900px] flex-col rounded-2xl border border-[#DEE0E3] bg-white p-3 shadow-lg">
-        <div className="flex justify-between">
-          <MessageInputToggle />
-        </div>
-        <InputBubbleMenu editor={editor} />
-        <div className="relative w-full flex-grow">
-          <EditorContent className="main-message-input text-sm" editor={editor} />
-        </div>
-
-        {/* Display attached files as badges */}
-        {attachedFiles.length > 0 && (
-          <div className="mt-2 flex flex-wrap gap-2">
-            {attachedFiles.map((file, index) => (
-              <div
-                key={index}
-                className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 font-medium text-gray-800 text-sm dark:bg-gray-700 dark:text-gray-300"
-              >
-                {file.name}
-                <button
-                  onClick={() => handleRemoveAttachedFile(file)}
-                  type="button"
-                  className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full text-gray-500 hover:bg-gray-300 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 dark:hover:bg-gray-600 dark:hover:text-gray-400"
-                  aria-label={`Remove ${file.name}`}
-                >
-                  <X className="h-3 w-3" aria-hidden="true" />
-                </button>
-              </div>
-            ))}
-          </div>
-        )}
-
-        <div className="mt-3 flex items-center justify-between">
-          <div className="relative flex">
-            <Button
-              variant="ghost"
-              size="icon"
-              className="rounded-lg p-2 transition-colors hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700"
-              onClick={handlePaperclipClick}
-            >
-              <Paperclip className="h-5 w-5 *:stroke-[#14151A]" />
-            </Button>
-            <GifPicker onGifSelect={handleGifSelect} />
-            {/*{[ImageIcon].map((Icon, index) => (*/}
-            {/*    <Button*/}
-            {/*        key={index}*/}
-            {/*        variant="ghost"*/}
-            {/*        size="icon"*/}
-            {/*        className="rounded-lg p-2 transition-colors hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700"*/}
-            {/*    >*/}
-            {/*        <Icon className="h-5 w-5 text-gray-600 dark:text-gray-300" />*/}
-            {/*    </Button>*/}
-            {/*))}*/}
-          </div>
-
-          <div className="flex gap-2">
-            <AudioRecorder />
-            <Button
-              onClick={handleSend}
-              disabled={!editor?.getText()}
-              className={cn(
-                "rounded-full bg-primary px-4 py-2 font-semibold text-sm text-white ring-4 ring-[#ECEEF9] transition-colors hover:bg-blue-600 active:bg-blue-700",
-                !editor?.getText() && "bg-zinc-400 hover:bg-zinc-400"
-              )}
-            >
-              <Send className="h-4 w-4" />
-              Send
-            </Button>
-          </div>
-        </div>
-        <input type="file" ref={fileInputRef} className="hidden" multiple onChange={handleFileChange} accept="image/*, .pdf, .doc, .docx, .txt" />
+    <Stack
+      sx={[
+        {
+          minHeight: 200,
+          position: "relative",
+          borderRadius: 4,
+          m: 1,
+          p: 2,
+          backgroundColor: colors.primary[50],
+          borderWidth: 1
+        },
+        theme =>
+          theme.applyStyles("dark", {
+            backgroundColor: colors.primary[900],
+            borderColor: colors.primary[800],
+            color: colors.common.white
+          })
+      ]}
+    >
+      {/* <div className="absolute bottom-0 mx-auto mb-1 flex h-auto min-h-[190px] w-[90%] max-w-[900px] flex-col rounded-2xl border border-[#DEE0E3] bg-white p-3 shadow-lg"> */}
+      <div className="flex justify-between">
+        <MessageInputToggle />
       </div>
-    </div>
+      <InputBubbleMenu editor={editor} />
+      <Box
+        sx={[
+          {
+            "& .ProseMirror": {
+              color: colors.common.black
+            }
+          },
+          theme =>
+            theme.applyStyles("dark", {
+              "& .ProseMirror": {
+                color: colors.common.white
+              }
+            })
+        ]}
+        className="relative w-full flex-1 flex-grow"
+      >
+        <EditorContent className="main-message-input text-sm" editor={editor} />
+      </Box>
+
+      {/* Display attached files as badges */}
+      {attachedFiles.length > 0 && (
+        <div className="mt-2 flex flex-wrap gap-2">
+          {attachedFiles.map((file, index) => (
+            <div
+              key={index}
+              className="inline-flex items-center rounded-full bg-gray-200 px-3 py-1 font-medium text-gray-800 text-sm dark:bg-gray-700 dark:text-gray-300"
+            >
+              {file.name}
+              <button
+                onClick={() => handleRemoveAttachedFile(file)}
+                type="button"
+                className="ml-1 inline-flex h-4 w-4 items-center justify-center rounded-full hover:bg-gray-300 hover:text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400 dark:focus:ring-gray-600 dark:hover:bg-gray-600 dark:hover:text-gray-400"
+                aria-label={`Remove ${file.name}`}
+              >
+                <X className="h-3 w-3" aria-hidden="true" />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      <div className="mt-3 flex items-center justify-between">
+        <div className="relative flex">
+          <IconButton onClick={handlePaperclipClick}>
+            <AttachFileIcon />
+          </IconButton>
+          <GifPicker onGifSelect={handleGifSelect} />
+          {/*{[ImageIcon].map((Icon, index) => (*/}
+          {/*    <Button*/}
+          {/*        key={index}*/}
+          {/*        variant="ghost"*/}
+          {/*        size="icon"*/}
+          {/*        className="rounded-lg p-2 transition-colors hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700"*/}
+          {/*    >*/}
+          {/*        <Icon className="h-5 w-5 text-gray-600 dark:text-gray-300" />*/}
+          {/*    </Button>*/}
+          {/*))}*/}
+        </div>
+
+        <div className="flex gap-2">
+          <AudioRecorder />
+          <Button variant="contained" onClick={handleSend} disabled={!editor?.getText()}>
+            {/* <Send className="h-4 w-4" /> */}
+            Send
+          </Button>
+        </div>
+      </div>
+      <input type="file" ref={fileInputRef} className="hidden" multiple onChange={handleFileChange} accept="image/*, .pdf, .doc, .docx, .txt" />
+      {/* </div> */}
+    </Stack>
   )
 }

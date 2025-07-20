@@ -36,11 +36,8 @@ export const useMessageOptimisticUpdate = () => {
   const queryClient = useQueryClient()
   const { currentTicket } = useChatStore()
 
-  return (newMessage: Partial<IMessage>) => {
-    console.log("currentTicket?.id")
-    console.log(currentTicket?.id)
-
-    return queryClient.setQueryData(messagesKeys.list({ conversation: currentTicket?.id }), (oldData: IMessageListResponse | undefined) => {
+  return (newMessage: Partial<IMessage>) =>
+    queryClient.setQueryData(messagesKeys.list({ conversation: currentTicket?.id }), (oldData: IMessageListResponse | undefined) => {
       // If cache is not found, initialize it with the new message
       if (!oldData) {
         return {
@@ -50,16 +47,10 @@ export const useMessageOptimisticUpdate = () => {
           previous: null
         }
       }
-      console.log(oldData)
-      console.log({
-        ...oldData,
-        results: [newMessage, ...oldData.results]
-      })
       return {
         ...oldData,
         count: oldData.count + 1,
         results: [newMessage, ...oldData.results]
       }
     })
-  }
 }

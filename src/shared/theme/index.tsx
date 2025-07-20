@@ -12,7 +12,9 @@ export const LinkBehavior = React.forwardRef<HTMLAnchorElement, Omit<RouterLinkP
 })
 
 export const colors = {
-  primary: MuiColors.deepPurple,
+  // primary: MuiColors.deepPurple,
+  // primary: MuiColors.blueGrey,
+  primary: MuiColors.grey,
   ...MuiColors
 }
 

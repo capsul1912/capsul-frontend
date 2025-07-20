@@ -1,4 +1,4 @@
-import type { IMessage } from "@/entities/message/types.ts"
+import type { IMessage, IMessageSender } from "@/entities/message/types.ts"
 import TypingEffect from "@/features/typing-effect"
 import { cn } from "@/shared/lib/helpers"
 import { Button } from "@/shared/ui/button.tsx"
@@ -17,7 +17,8 @@ export interface IChatResult {
   source: "Cache" | "Fallback"
 }
 
-interface IProps {
+export interface MessageBubbleProps {
+  sender: IMessageSender
   timestamp?: string
   message?: IMessage
   typing?: boolean
@@ -27,8 +28,8 @@ interface IProps {
   handleReply?: (messageObj: IMessage) => void
 }
 
-export const ClientMessageBubble = forwardRef<HTMLDivElement, IProps>(
-  ({ message, typing, handleReply, timestamp, isAssigned = false }: IProps, ref) => {
+export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
+  ({ sender, message, typing, handleReply, timestamp, isAssigned = false }: MessageBubbleProps, ref) => {
     // Helper Hooks
     // const { currentSession } = useChat();
 
@@ -62,9 +63,17 @@ export const ClientMessageBubble = forwardRef<HTMLDivElement, IProps>(
         }}
         className="group"
       >
-        <Stack direction="row" gap={1}>
-          <User2Icon className="mx-auto size-8 rounded-full border p-1.5" />
-          <MessageBox sender="CLIENT" originPosition="left" sx={{ position: "relative", pb: 3, minWidth: "100px" }}>
+        <Stack
+          direction="row"
+          alignItems={sender === "OPERATOR" ? "end" : "start"}
+          gap={1}
+          sx={{
+            maxWidth: "90%",
+            marginLeft: sender === "OPERATOR" ? "auto" : undefined
+          }}
+        >
+          {sender !== "OPERATOR" && <User2Icon className="mx-auto size-8 shrink-0 rounded-full border p-1.5" />}
+          <MessageBox sender={sender} sx={{ position: "relative", pb: 3, minWidth: "100px" }}>
             {/* <div className="relative rounded-2xl rounded-tl-none bg-bg-light p-5 pb-7 text-[#14151A]"> */}
             {typing ? temp ? <ReactMarkdown>{temp}</ReactMarkdown> : <TypingEffect /> : <ReactMarkdown>{message?.content}</ReactMarkdown>}
             <Typography fontSize={12} color="textDisabled" sx={{ position: "absolute", bottom: 4, right: 8 }}>

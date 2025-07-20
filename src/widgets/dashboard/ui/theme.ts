@@ -38,7 +38,7 @@ export const innerTheme = createTheme(
             minWidth: 0,
             marginRight: theme.spacing(1),
             padding: theme.spacing(0.25),
-            color: colors.primary[300]
+            color: colors.primary[500]
           }
         }
       },

@@ -15,7 +15,7 @@ export const SidebarMain = styled(Drawer)<{
     width,
     flexShrink: 0,
     boxSizing: "border-box",
-    mt: 10,
+    // marginTop: theme.spacing(10),
     [`&, & .${drawerClasses.paper}`]: {
       borderTopRightRadius: 20,
       borderBottomRightRadius: 20,
@@ -50,7 +50,7 @@ export const SidebarMain = styled(Drawer)<{
             width,
             borderTopRightRadius: 20,
             borderBottomRightRadius: 20,
-            borderRightColor: colors.primary[100]
+            borderRightColor: colors.primary[300]
           },
           [`&, & .${drawerClasses.paper}`]: {
             width: 46,

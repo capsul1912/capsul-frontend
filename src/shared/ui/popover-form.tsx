@@ -1,3 +1,4 @@
+import IconButton from "@mui/material/IconButton"
 import { ChevronUpIcon } from "@radix-ui/react-icons"
 import { AnimatePresence, motion } from "framer-motion"
 import { Loader, Mic } from "lucide-react"
@@ -34,7 +35,8 @@ export function PopoverForm({
 
   return (
     <div key={title} className="flex w-full items-center justify-center">
-      <motion.button
+      <IconButton
+        component={motion.button}
         layoutId={`${title}-wrapper`}
         onClick={() => setOpen(true)}
         style={{ borderRadius: 8, display: open ? "nonde" : "" }}
@@ -46,7 +48,7 @@ export function PopoverForm({
         {/*<motion.span layoutId={`${title}-title`} className="text-black">*/}
         {/*    {title}*/}
         {/*</motion.span>*/}
-      </motion.button>
+      </IconButton>
       <AnimatePresence>
         {open && (
           <motion.div
