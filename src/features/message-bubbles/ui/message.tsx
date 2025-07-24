@@ -1,11 +1,9 @@
 import type { IMessage, IMessageSender } from "@/entities/message/types.ts"
 import TypingEffect from "@/features/typing-effect"
-import { cn } from "@/shared/lib/helpers"
-import { Button } from "@/shared/ui/button.tsx"
 import Stack from "@mui/material/Stack"
 import Typography from "@mui/material/Typography"
 import dayjs from "dayjs"
-import { Reply, User2Icon } from "lucide-react"
+import { User2Icon } from "lucide-react"
 import { forwardRef, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import { MessageBox } from "./message-components"
@@ -64,15 +62,15 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
         className="group"
       >
         <Stack
-          direction="row"
-          alignItems={sender === "OPERATOR" ? "end" : "start"}
+          direction={sender === "CLIENT" ? "row" : "row-reverse"}
+          alignItems={sender !== "CLIENT" ? "end" : "start"}
           gap={1}
           sx={{
             maxWidth: "90%",
-            marginLeft: sender === "OPERATOR" ? "auto" : undefined
+            marginLeft: sender !== "CLIENT" ? "auto" : undefined
           }}
         >
-          {sender !== "OPERATOR" && <User2Icon className="mx-auto size-8 shrink-0 rounded-full border p-1.5" />}
+          {sender === "CLIENT" && <User2Icon className="mx-auto size-8 shrink-0 rounded-full border p-1.5" />}
           <MessageBox sender={sender} sx={{ position: "relative", pb: 3, minWidth: "100px" }}>
             {/* <div className="relative rounded-2xl rounded-tl-none bg-bg-light p-5 pb-7 text-[#14151A]"> */}
             {typing ? temp ? <ReactMarkdown>{temp}</ReactMarkdown> : <TypingEffect /> : <ReactMarkdown>{message?.content}</ReactMarkdown>}
@@ -81,19 +79,15 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
             </Typography>
             {/* </div> */}
           </MessageBox>
+          {/* <IconButton */}
+          {/*   size="small" */}
+          {/*   onClick={() => { */}
+          {/*     if (message) handleReply?.(message) */}
+          {/*   }} */}
+          {/* > */}
+          {/*   <Reply className="size-5" /> */}
+          {/* </IconButton> */}
         </Stack>
-        <div className="flex items-center">
-          <Button
-            variant={"outline"}
-            size={"sm"}
-            onClick={() => {
-              if (message) handleReply?.(message)
-            }}
-            className={cn("border-0 bg-gray-100 px-2 hover:bg-gray-200 active:bg-gray-300", isAssigned ? "group-hover:flex" : "hidden")}
-          >
-            <Reply className="size-5" />
-          </Button>
-        </div>
       </Stack>
     )
   }

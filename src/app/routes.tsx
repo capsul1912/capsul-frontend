@@ -38,7 +38,7 @@ type CustomRouteObject = (IndexRouteObject | CustomNonIndexRouteObject) & Custom
 
 export const routes: CustomRouteObject[] = [
   {
-    path: "/:projectId",
+    path: "/inbox",
     element: (
       <ProtectedRoute>
         <DashboardLayout />
@@ -50,11 +50,15 @@ export const routes: CustomRouteObject[] = [
         children: [
           {
             index: true,
-            element: <Navigate to="inbox" />
+            element: <InboxPage />
           },
           {
-            path: "inbox",
-            element: <InboxPage />
+            path: "mentions",
+            element: (
+              <ChatProvider>
+                <MentionsPage />
+              </ChatProvider>
+            )
           },
           {
             path: "settings",
@@ -94,28 +98,12 @@ export const routes: CustomRouteObject[] = [
               }
             ]
           },
-          {
-            path: "inbox/mentions",
-            element: (
-              <ChatProvider>
-                <MentionsPage />
-              </ChatProvider>
-            )
-          },
           { path: "account-old", element: <AccountPage1 /> },
           { path: "account", element: <AccountPage /> }
         ]
       }
     ]
   },
-  // { path: "/login", element: <LoginPage /> },
-  // { path: "/login", element: <LoginPagePrevious /> },
-  { path: "/login", element: <LoginPage /> },
-  { path: "/reset-password", element: <ResetPasswordPage /> },
-  { path: "/change-password", element: <SetNewPassword /> },
-  { path: "/verify-key/:key", element: <VerifyEmailPage /> },
-  { path: "/signup", element: <SignupPage /> },
-  { path: "/", element: <Navigate to="/main" /> },
   {
     path: "/main",
     element: (
@@ -132,9 +120,17 @@ export const routes: CustomRouteObject[] = [
   },
   { path: "/main/settings", element: <OrganizationSettings /> },
 
+  { path: "/", element: <Navigate to="/main" /> },
+  // { path: "/login", element: <LoginPage /> },
+  // { path: "/login", element: <LoginPagePrevious /> },
+  { path: "/login", element: <LoginPage /> },
+  { path: "/reset-password", element: <ResetPasswordPage /> },
   {
     path: "accounts/:fieldName/update/:userId/:oneTimePassword",
     element: <ResetPage />
   },
+  { path: "/change-password", element: <SetNewPassword /> },
+  { path: "/verify-key/:key", element: <VerifyEmailPage /> },
+  { path: "/signup", element: <SignupPage /> },
   { path: "*", element: <NotFoundPage /> }
 ] as const

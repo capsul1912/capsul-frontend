@@ -15,9 +15,25 @@ export const MessageBox = styled(Box, { shouldForwardProp: prop => !["sender"].i
       {
         props: props => props.sender === "CLIENT",
         style: {
+          borderRadius: "0 8px 8px 8px",
           backgroundColor: colors.grey[200]
         }
       },
+      {
+        props: props => props.sender !== "CLIENT",
+        style: {
+          borderRadius: "8px 8px 0 8px",
+          backgroundColor: colors.blueGrey[100]
+        }
+      },
+      {
+        props: props => props.sender === "AGENT",
+        style: {
+          borderRadius: "8px 8px 0 8px",
+          backgroundColor: colors.deepPurple[50]
+        }
+      },
+
       {
         props: props => props.sender === "CLIENT",
         style: theme.applyStyles("dark", {
@@ -25,35 +41,10 @@ export const MessageBox = styled(Box, { shouldForwardProp: prop => !["sender"].i
         })
       },
       {
-        props: props => props.sender === "AGENT",
-        style: {
-          backgroundColor: colors.primary[100]
-        }
-      },
-      {
-        props: props => props.sender === "AGENT",
-        style: theme.applyStyles("dark", {
-          backgroundColor: colors.primary[100]
-        })
-      },
-      {
-        props: props => props.sender === "OPERATOR",
-        style: {
-          backgroundColor: colors.primary[50],
-          borderRadius: "8px 8px 0 8px"
-        }
-      },
-      {
-        props: props => props.sender === "OPERATOR",
+        props: props => props.sender !== "CLIENT",
         style: theme.applyStyles("dark", {
           backgroundColor: colors.primary[700]
         })
-      },
-      {
-        props: props => props.sender !== "OPERATOR",
-        style: {
-          borderRadius: "0 8px 8px 8px"
-        }
       }
     ]
   }

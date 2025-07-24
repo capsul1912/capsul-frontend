@@ -1,4 +1,3 @@
-import { useFetchProjects } from "@/pages/main/api/use-fetch-project"
 import { Logo } from "@/shared/icons"
 import { authApi } from "@/shared/lib/api/auth-api"
 import { mergeArray } from "@/shared/lib/utils"
@@ -44,31 +43,21 @@ export const Sidebar: React.FC<SidebarProps> = ({ width: drawerWidth = 200, pinn
     queryFn: authApi.getUser
   })
 
-  const { data: projects } = useFetchProjects({
-    // organization: "e9d3d89c-f85b-41cd-83ad-b3826b1c990d"
-  })
-
-  const lastProject = projects?.results?.[0]
-
   const location = useLocation()
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
 
   const mainListItems = React.useMemo(
     () =>
-      mergeArray<ItemProp>(
-        lastProject
-          ? {
-              text: "Inbox",
-              icon: <InboxIcon />,
-              MuiListItemButton: {
-                href: `/${lastProject.id}/inbox`,
-                selected: location.pathname.endsWith("/inbox")
-              }
-            }
-          : undefined
-      ),
-    [location, lastProject]
+      mergeArray<ItemProp>({
+        text: "Inbox",
+        icon: <InboxIcon />,
+        MuiListItemButton: {
+          href: `/inbox`,
+          selected: location.pathname.startsWith("/inbox")
+        }
+      }),
+    [location]
   )
 
   const secondaryListItems = React.useMemo(
