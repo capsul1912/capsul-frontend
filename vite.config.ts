@@ -15,10 +15,13 @@ export default defineConfig({
     // MillionLint.vite(),
     VitePWA({
       registerType: "autoUpdate",
+      workbox: {
+        maximumFileSizeToCacheInBytes: 69 * 1024 * 1024
+      },
       manifest: {
-        name: "Chatx Inbox",
-        short_name: "Chatx",
-        description: "Chatx Inbox",
+        name: "Capsul AI Inbox",
+        short_name: "Capsul AI",
+        description: "Capsul AI Inbox",
         theme_color: "#ffffff",
         icons: [
           {
