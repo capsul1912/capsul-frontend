@@ -1,12 +1,10 @@
 import type { ITicketStatus } from "@/entities/ticket/types.ts"
 import { create } from "zustand"
-import type { IMainFilterType } from "../types"
 
 type ITicketsFilter = {
   teamId: number | null
   integrationId: string | null
   status: ITicketStatus | "ALL" | null
-  mainFilter: IMainFilterType | null
   inboxTypeId: number | null
 }
 

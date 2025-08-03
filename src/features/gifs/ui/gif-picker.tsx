@@ -1,8 +1,6 @@
 import { type IGiphyGif, fetchGifs } from "@/features/gifs/api/giphy-api.ts"
 import { useClickOutside, useDebounce } from "@/shared/lib/hooks"
 import { Input } from "@/shared/ui/input.tsx"
-import GifIcon from "@mui/icons-material/Gif"
-import IconButton from "@mui/material/IconButton"
 import { AnimatePresence, motion } from "framer-motion"
 import { Loader2, Search } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
@@ -63,15 +61,15 @@ export default function GifPicker({ onGifSelect }: GifPickerProps) {
 
   return (
     <>
-      <IconButton
-        ref={buttonRef}
-        variant="ghost"
-        size="icon"
-        className="rounded-lg p-2 transition-colors hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700"
-        onClick={() => setOpen(!open)}
-      >
-        <GifIcon />
-      </IconButton>
+      {/* <IconButton */}
+      {/*   ref={buttonRef} */}
+      {/*   variant="ghost" */}
+      {/*   size="icon" */}
+      {/*   className="rounded-lg p-2 transition-colors hover:bg-gray-100 active:bg-gray-200 dark:hover:bg-gray-700" */}
+      {/*   onClick={() => setOpen(!open)} */}
+      {/* > */}
+      {/*   <GifIcon /> */}
+      {/* </IconButton> */}
 
       <AnimatePresence>
         {open && (

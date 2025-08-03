@@ -26,69 +26,67 @@ export interface MessageBubbleProps {
   handleReply?: (messageObj: IMessage) => void
 }
 
-export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
-  ({ sender, message, typing, handleReply, timestamp, isAssigned = false }: MessageBubbleProps, ref) => {
-    // Helper Hooks
-    // const { currentSession } = useChat();
+export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(({ sender, message, typing, timestamp }: MessageBubbleProps, ref) => {
+  // Helper Hooks
+  // const { currentSession } = useChat();
 
-    // Queries
-    // const { data: fetchedIssued } = useFetchIssuesQuery(
-    //     {
-    //         session__session_id: currentSession?.session_id,
-    //     },
-    //     { skip: !currentSession?.session_id }
-    // );
-    // States
-    const [temp] = useState("")
+  // Queries
+  // const { data: fetchedIssued } = useFetchIssuesQuery(
+  //     {
+  //         session__session_id: currentSession?.session_id,
+  //     },
+  //     { skip: !currentSession?.session_id }
+  // );
+  // States
+  const [temp] = useState("")
 
-    // Functions
-    // const foundIssue = fetchedIssued?.find(
-    //     issue => issue.chatlog?.id === messageObj?.id
-    // );
-    // const isResolved = foundIssue
-    //     ? foundIssue?.resolved_by !== null
-    //     : false;
+  // Functions
+  // const foundIssue = fetchedIssued?.find(
+  //     issue => issue.chatlog?.id === messageObj?.id
+  // );
+  // const isResolved = foundIssue
+  //     ? foundIssue?.resolved_by !== null
+  //     : false;
 
-    return (
+  return (
+    <Stack
+      ref={ref}
+      direction="row"
+      gap={0.5}
+      px={1}
+      sx={{
+        fontSize: "0.875rem",
+        lineHeight: "1.25rem"
+      }}
+      className="group"
+    >
       <Stack
-        ref={ref}
-        direction="row"
-        gap={0.5}
-        px={1}
+        direction={sender === "CLIENT" ? "row" : "row-reverse"}
+        alignItems={sender !== "CLIENT" ? "end" : "start"}
+        gap={1}
         sx={{
-          fontSize: "0.875rem",
-          lineHeight: "1.25rem"
+          maxWidth: "90%",
+          marginLeft: sender !== "CLIENT" ? "auto" : undefined
         }}
-        className="group"
       >
-        <Stack
-          direction={sender === "CLIENT" ? "row" : "row-reverse"}
-          alignItems={sender !== "CLIENT" ? "end" : "start"}
-          gap={1}
-          sx={{
-            maxWidth: "90%",
-            marginLeft: sender !== "CLIENT" ? "auto" : undefined
-          }}
-        >
-          {sender === "CLIENT" && <User2Icon className="mx-auto size-8 shrink-0 rounded-full border p-1.5" />}
-          <MessageBox sender={sender} sx={{ position: "relative", pb: 3, minWidth: "100px" }}>
-            {/* <div className="relative rounded-2xl rounded-tl-none bg-bg-light p-5 pb-7 text-[#14151A]"> */}
-            {typing ? temp ? <ReactMarkdown>{temp}</ReactMarkdown> : <TypingEffect /> : <ReactMarkdown>{message?.content}</ReactMarkdown>}
-            <Typography fontSize={12} color="textDisabled" sx={{ position: "absolute", bottom: 4, right: 8 }}>
-              {timestamp ? dayjs(timestamp).format("HH:mm") : ""}
-            </Typography>
-            {/* </div> */}
-          </MessageBox>
-          {/* <IconButton */}
-          {/*   size="small" */}
-          {/*   onClick={() => { */}
-          {/*     if (message) handleReply?.(message) */}
-          {/*   }} */}
-          {/* > */}
-          {/*   <Reply className="size-5" /> */}
-          {/* </IconButton> */}
-        </Stack>
+        {sender === "CLIENT" && <User2Icon className="mx-auto size-8 shrink-0 rounded-full border p-1.5" />}
+        <MessageBox sender={sender} sx={{ position: "relative", pb: 3, minWidth: "100px" }}>
+          {/* <div className="relative rounded-2xl rounded-tl-none bg-bg-light p-5 pb-7 text-[#14151A]"> */}
+          {typing ? temp ? <ReactMarkdown>{temp}</ReactMarkdown> : <TypingEffect /> : <ReactMarkdown>{message?.content}</ReactMarkdown>}
+          <Typography fontSize={12} color="textDisabled" sx={{ position: "absolute", bottom: 4, right: 8 }}>
+            {timestamp ? dayjs(timestamp).format("HH:mm") : ""}
+          </Typography>
+          {/* </div> */}
+        </MessageBox>
+        {/* <IconButton */}
+        {/*   size="small" */}
+        {/*   onClick={() => { */}
+        {/*     if (message) handleReply?.(message) */}
+        {/*   }} */}
+        {/* > */}
+        {/*   <Reply className="size-5" /> */}
+        {/* </IconButton> */}
       </Stack>
-    )
-  }
-)
+    </Stack>
+  )
+})

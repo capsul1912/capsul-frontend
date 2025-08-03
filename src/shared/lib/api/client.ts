@@ -16,7 +16,7 @@ export const fetchClient = createFetchClient<paths>({
 })
 
 const authMiddleware: Middleware = {
-  async onRequest({ request, options }) {
+  async onRequest({ request }) {
     // set "foo" header
     // if (config.url === "/auth/registration/" || config.url === "/auth/registration/verify-email/" || config.url === "/auth/login/") {
     //   return config

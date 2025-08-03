@@ -63,7 +63,7 @@ const UserMessageBox = forwardRef<HTMLDivElement, IProps>(({ message, typing, ha
     >
       <div className="flex max-w-[77%] gap-2 ">
         <User2Icon className="mx-auto size-8 rounded-full border bg-white p-1.5" />
-        <Box sx={[theme => ({})]}>
+        <Box>
           <div className="relative rounded-2xl rounded-tl-none bg-bg-light p-5 pb-7 text-[#14151A]">
             {typing ? temp ? <ReactMarkdown>{temp}</ReactMarkdown> : <TypingEffect /> : <ReactMarkdown>{message?.content}</ReactMarkdown>}
             <Typography fontSize={12} color="textDisabled" sx={{ position: "absolute", bottom: 4, right: 8 }}>

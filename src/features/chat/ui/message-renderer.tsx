@@ -21,7 +21,7 @@ export const MessageRenderer = memo(() => {
   const [searchParams] = useSearchParams()
 
   // Store
-  const { goToMessage, addToReferences, setMessages, messages, reply } = useChatStore()
+  const { goToMessage, addToReferences, setMessages, messages } = useChatStore()
 
   const messagesSorted = React.useMemo(
     () =>

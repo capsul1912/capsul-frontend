@@ -13,7 +13,7 @@ import type { TabValue } from "../types"
 import { PageHeader, PageMain, PagePaper, SidebarDrawer } from "./components"
 
 export const InboxPage: React.FC = () => {
-  const [open, setOpen] = React.useState(false)
+  const [open] = React.useState(false)
   const [tab, setTab] = React.useState<TabValue>("details")
   const { currentTicket } = useChatStore()
   console.log("Current ticket:", currentTicket)
