@@ -38,25 +38,37 @@ export const SidebarMain = styled(Drawer)<{
         duration: theme.transitions.duration.leavingScreen
       })
     },
-    transition: theme.transitions.create(["margin", "width", "border-radius"], {
+    transition: theme.transitions.create(["margin", "width", "border-color"], {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen
     }),
     variants: [
       {
+        props: ({ pinned, hovered }) => !pinned && hovered,
+        style: {
+          [`&, & .${drawerClasses.paper}`]: {
+            borderRightColor: colors.primary[300]
+          }
+        }
+      },
+      {
+        props: ({ pinned, hovered }) => !pinned && hovered,
+        style: theme.applyStyles("dark", {
+          [`&, & .${drawerClasses.paper}`]: {
+            borderRightColor: darken(colors.primary[600], 0.5)
+          }
+        })
+      },
+      {
         props: ({ pinned, hovered }) => !pinned && !hovered,
         style: {
           [`&:hover, &:hover .${drawerClasses.paper}`]: {
             width,
-            borderTopRightRadius: 20,
-            borderBottomRightRadius: 20,
             borderRightColor: colors.primary[300]
           },
           [`&, & .${drawerClasses.paper}`]: {
             width: 46,
-            borderTopRightRadius: 0,
-            borderBottomRightRadius: 0,
-            transition: theme.transitions.create(["margin", "width", "border-radius"], {
+            transition: theme.transitions.create(["margin", "width", "border-color"], {
               easing: theme.transitions.easing.sharp,
               duration: theme.transitions.duration.enteringScreen
             })

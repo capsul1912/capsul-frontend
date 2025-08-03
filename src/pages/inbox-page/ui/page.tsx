@@ -29,6 +29,7 @@ export const InboxPage: React.FC = () => {
                 Messenger
               </Typography>
             </PageHeader>
+
             <ChatSection />
           </PagePaper>
         </PageMain>

@@ -2,7 +2,6 @@ import { Logo } from "@/shared/icons"
 import { authApi } from "@/shared/lib/api/auth-api"
 import { mergeArray } from "@/shared/lib/utils"
 import { colors } from "@/shared/theme"
-import HomeIcon from "@mui/icons-material/Home"
 import InboxIcon from "@mui/icons-material/Inbox"
 import PinOffIcon from "@mui/icons-material/PushPin"
 import PinIcon from "@mui/icons-material/PushPinOutlined"
@@ -64,14 +63,13 @@ export const Sidebar: React.FC<SidebarProps> = ({ width: drawerWidth = 200, pinn
     () =>
       mergeArray<ItemProp>(
         {
-          text: "Home",
-          icon: <HomeIcon />,
+          text: "Settings",
+          icon: <SettingsRoundedIcon />,
           MuiListItemButton: {
-            href: "/main",
-            selected: location.pathname === "/main"
+            href: "/settings",
+            selected: location.pathname.startsWith("/settings")
           }
         },
-        { text: "Settings", icon: <SettingsRoundedIcon /> },
         {
           text: "Profile",
           icon: <Avatar sizes="small" alt={user?.full_name} sx={{ width: 16, height: 16, m: "2px" }} />,

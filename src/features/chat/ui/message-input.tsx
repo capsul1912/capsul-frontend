@@ -99,27 +99,30 @@ export default function MessageInput({ onSend }: IProps) {
   // Functions
   const handleSend = () => {
     const content = editor?.getText()
-    if (editor && content && currentTicket?.id && user?.id) {
-      // const content = editor.getJSON();
-      // sendMessage(content);
-      optimisticUpdate({
-        content,
-        conversation: currentTicket?.id,
-        type: "MESSAGE",
-        role: "OPERATOR",
-        created_at: new Date().toISOString()
-      })
-      playSound()
-      onSend({
-        content,
-        role: "OPERATOR", // TODO: unneccessary
-        type: "MESSAGE",
-        author_id: user?.id
-      })
-      // mutate({ content, type: 'MESSAGE', conversation: currentTicket?.id });
-      editor.commands.setContent("")
-      setAttachedFiles([])
+    console.log("helloe", content)
+    if (!(editor && content && currentTicket?.id && user?.id)) {
+      return
     }
+
+    // const content = editor.getJSON();
+    // sendMessage(content);
+    optimisticUpdate({
+      content,
+      conversation: currentTicket?.id,
+      type: "MESSAGE",
+      role: "OPERATOR",
+      created_at: new Date().toISOString()
+    })
+    playSound()
+    onSend({
+      content,
+      role: "OPERATOR", // TODO: unneccessary
+      type: "MESSAGE",
+      author_id: user?.id
+    })
+    // mutate({ content, type: 'MESSAGE', conversation: currentTicket?.id });
+    editor.commands.setContent("")
+    setAttachedFiles([])
   }
 
   const handleGifSelect = (gifUrl: string) => {
@@ -148,41 +151,45 @@ export default function MessageInput({ onSend }: IProps) {
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files
-    if (files && files.length > 0) {
-      const filesArray = Array.from(files)
-      const newAttachedFiles: File[] = []
-
-      filesArray.forEach(file => {
-        if (file.type.startsWith("image/")) {
-          // Handle image files (insert into editor)
-          const reader = new FileReader()
-          reader.onload = readerEvent => {
-            const base64Image = readerEvent.target?.result
-            if (typeof base64Image === "string" && editor) {
-              editor.commands.insertContent([
-                {
-                  type: "image",
-                  attrs: {
-                    src: base64Image
-                  }
-                },
-                {
-                  type: "paragraph"
-                }
-              ])
-              editor.commands.focus("end")
-            }
-          }
-          reader.readAsDataURL(file)
-        } else {
-          // Handle other files (add to attachedFiles state)
-          newAttachedFiles.push(file)
-        }
-      })
-      // Update attachedFiles state with newly selected non-image files
-      setAttachedFiles(prevFiles => [...prevFiles, ...newAttachedFiles])
-      event.target.value = "" // Clear file input
+    if (!(files && files.length > 0)) {
+      return
     }
+
+    const filesArray = Array.from(files)
+    const newAttachedFiles: File[] = []
+
+    filesArray.forEach(file => {
+      if (!file.type.startsWith("image/")) {
+        newAttachedFiles.push(file)
+        return
+      }
+
+      // Handle image files (insert into editor)
+      const reader = new FileReader()
+      reader.onload = readerEvent => {
+        const base64Image = readerEvent.target?.result
+        if (!(typeof base64Image === "string" && editor)) {
+          return
+        }
+
+        editor.commands.insertContent([
+          {
+            type: "image",
+            attrs: {
+              src: base64Image
+            }
+          },
+          {
+            type: "paragraph"
+          }
+        ])
+        editor.commands.focus("end")
+      }
+      reader.readAsDataURL(file)
+    })
+    // Update attachedFiles state with newly selected non-image files
+    setAttachedFiles(prevFiles => [...prevFiles, ...newAttachedFiles])
+    event.target.value = "" // Clear file input
   }
 
   const handleRemoveAttachedFile = (fileToRemove: File) => {

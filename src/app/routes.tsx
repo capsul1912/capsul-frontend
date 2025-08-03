@@ -14,17 +14,17 @@ import OrganizationSettings from "@/pages/main/components/organization-settings"
 import MentionsPage from "@/pages/mentions-page"
 import NotFoundPage from "@/pages/not-found-page"
 import ResetPage from "@/pages/reset-pages/reset-page.tsx"
-import SettingsPage from "@/pages/settings-page"
 import CustomizationPage from "@/pages/settings-page/components/customization-page.tsx"
 import DeleteBotPage from "@/pages/settings-page/components/delete-bot-page.tsx"
 import InstallationPage from "@/pages/settings-page/components/installation-page.tsx"
 import IntegrationPage from "@/pages/settings-page/components/integration-page.tsx"
-import InvitationPage from "@/pages/settings-page/components/invitation-page.tsx"
 import KnowledgePage from "@/pages/settings-page/components/knowledge-page.tsx"
-import ProfilePage from "@/pages/settings-page/components/profile-page.tsx"
 import ProjectSettigs from "@/pages/settings-page/components/project-settings"
+import { SettingsProfilePage } from "@/pages/settings-profile"
+import { SettingsUsersAndTeamsPage } from "@/pages/settings-users-and-teams"
 import { DashboardLayout } from "@/widgets/dashboard"
 import { InboxLayout } from "@/widgets/inbox-layout"
+import { SettingsLayout } from "@/widgets/settings-layout"
 import { type IndexRouteObject, Navigate, type NonIndexRouteObject } from "react-router-dom"
 import ProtectedRoute from "./protected-route"
 
@@ -60,46 +60,62 @@ export const routes: CustomRouteObject[] = [
               </ChatProvider>
             )
           },
-          {
-            path: "settings",
-            element: <SettingsPage />,
-            children: [
-              {
-                path: "profile",
-                element: <ProfilePage />
-              },
-              {
-                path: "invitation",
-                element: <InvitationPage />
-              },
-              {
-                path: "installation",
-                element: <InstallationPage />
-              },
-              {
-                path: "customize",
-                element: <CustomizationPage />
-              },
-              {
-                path: "integration",
-                element: <IntegrationPage />
-              },
-              {
-                path: "knowledge",
-                element: <KnowledgePage />
-              },
-              {
-                path: "delete",
-                element: <DeleteBotPage />
-              },
-              {
-                path: "project-settings",
-                element: <ProjectSettigs />
-              }
-            ]
-          },
           { path: "account-old", element: <AccountPage1 /> },
           { path: "account", element: <AccountPage /> }
+        ]
+      }
+    ]
+  },
+  {
+    path: "/settings",
+    element: (
+      <ProtectedRoute>
+        <DashboardLayout />
+      </ProtectedRoute>
+    ),
+    children: [
+      {
+        // element: <SettingsPage />,
+        element: <SettingsLayout />,
+        children: [
+          {
+            index: true,
+            element: <Navigate to="profile" replace />
+          },
+          {
+            path: "profile",
+            // element: <ProfilePage />
+            element: <SettingsProfilePage />
+          },
+          {
+            path: "users-and-teams",
+            // element: <InvitationPage />
+            element: <SettingsUsersAndTeamsPage />
+          },
+          {
+            path: "installation",
+            element: <InstallationPage />
+          },
+          {
+            path: "customize",
+            element: <CustomizationPage />
+          },
+          {
+            path: "integration",
+            element: <IntegrationPage />
+          },
+          {
+            path: "knowledge",
+            element: <KnowledgePage />
+          },
+          {
+            path: "delete",
+            element: <DeleteBotPage />
+          },
+          {
+            path: "project-settings",
+            element: <ProjectSettigs />
+          }
         ]
       }
     ]
@@ -120,7 +136,7 @@ export const routes: CustomRouteObject[] = [
   },
   { path: "/main/settings", element: <OrganizationSettings /> },
 
-  { path: "/", element: <Navigate to="/main" /> },
+  { path: "/", element: <Navigate to="/inbox" /> },
   // { path: "/login", element: <LoginPage /> },
   // { path: "/login", element: <LoginPagePrevious /> },
   { path: "/login", element: <LoginPage /> },

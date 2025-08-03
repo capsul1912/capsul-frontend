@@ -1,5 +1,5 @@
 .main-message-input .ProseMirror {
-  @apply max-h-56 min-h-[40px] w-full overflow-auto p-2 text-gray-800 !ring-0 focus:outline-none dark:text-gray-200;
+  @apply max-h-56 min-h-[40px] w-full overflow-auto p-2 !ring-0 focus:outline-none;
 }
 
 .tiptap p.is-editor-empty:first-child::before {
