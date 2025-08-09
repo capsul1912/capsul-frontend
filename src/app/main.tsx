@@ -22,6 +22,8 @@ import "@fontsource/roboto/300.css"
 import "@fontsource/roboto/400.css"
 import "@fontsource/roboto/500.css"
 import "@fontsource/roboto/700.css"
+import { LocalizationProvider } from "@mui/x-date-pickers"
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs"
 import { ThemeProvider } from "../shared/theme/index.tsx"
 
 Sentry.init({
@@ -37,27 +39,29 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           <Provider store={store}>
             <LanguageProvider>
               <BrowserRouter>
-                <TooltipProvider delayDuration={0}>
-                  <ToastProvider>
-                    <App />
-                    <Toaster
-                      richColors
-                      className="*:text-base"
-                      position="top-center"
-                      // icons={{
-                      //     success: <CheckedIcon
-                      //         className="rounded-full bg-green-600 p-1 *:stroke-green-300" />,
-                      //     error: <CircleX />,
-                      // }}
-                      // toastOptions={{
-                      //     className: 'dark:bg-transparent  border border-transparent p-4 rounded-lg shadow-lg',
-                      //     descriptionClassName: 'text-muted-foreground text-sm',
-                      //     duration: 3000,
-                      // }}
-                    />
-                    <ReactQueryDevtools />
-                  </ToastProvider>
-                </TooltipProvider>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <TooltipProvider delayDuration={0}>
+                    <ToastProvider>
+                      <App />
+                      <Toaster
+                        richColors
+                        className="*:text-base"
+                        position="top-center"
+                        // icons={{
+                        //     success: <CheckedIcon
+                        //         className="rounded-full bg-green-600 p-1 *:stroke-green-300" />,
+                        //     error: <CircleX />,
+                        // }}
+                        // toastOptions={{
+                        //     className: 'dark:bg-transparent  border border-transparent p-4 rounded-lg shadow-lg',
+                        //     descriptionClassName: 'text-muted-foreground text-sm',
+                        //     duration: 3000,
+                        // }}
+                      />
+                      <ReactQueryDevtools />
+                    </ToastProvider>
+                  </TooltipProvider>
+                </LocalizationProvider>
               </BrowserRouter>
             </LanguageProvider>
           </Provider>

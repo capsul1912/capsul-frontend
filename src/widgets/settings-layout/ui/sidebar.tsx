@@ -7,7 +7,7 @@ import CodeIcon from "@mui/icons-material/Code"
 // import MenuBookIcon from "@mui/icons-material/MenuBook"
 import PersonAddIcon from "@mui/icons-material/PersonAdd"
 // import SettingsIcon from "@mui/icons-material/Settings"
-import StyleIcon from "@mui/icons-material/Style"
+// import StyleIcon from "@mui/icons-material/Style"
 import Avatar from "@mui/material/Avatar"
 import { ThemeProvider } from "@mui/material/styles"
 import React from "react"
@@ -42,29 +42,29 @@ export const Sidebar: React.FC = () => {
           }
         },
         {
-          text: "Installation",
+          text: "Integrations",
+          icon: <AddLinkIcon />,
+          MuiListItemButton: {
+            href: "/settings/integrations",
+            selected: location.pathname === "/settings/integrations"
+          }
+        },
+        {
+          text: "Widget installation",
           icon: <CodeIcon />,
           MuiListItemButton: {
             href: "/settings/installation",
             selected: location.pathname === "/settings/installation"
           }
-        },
-        {
-          text: "Customize",
-          icon: <StyleIcon />,
-          MuiListItemButton: {
-            href: "/settings/customize",
-            selected: location.pathname === "/settings/customize"
-          }
-        },
-        {
-          text: "Integration",
-          icon: <AddLinkIcon />,
-          MuiListItemButton: {
-            href: "/settings/integration",
-            selected: location.pathname === "/settings/integration"
-          }
         }
+        // {
+        //   text: "Customize",
+        //   icon: <StyleIcon />,
+        //   MuiListItemButton: {
+        //     href: "/settings/customize",
+        //     selected: location.pathname === "/settings/customize"
+        //   }
+        // },
         // {
         //   text: "Knowledge",
         //   icon: <MenuBookIcon />,

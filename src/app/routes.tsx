@@ -9,19 +9,18 @@ import VerifyEmailPage from "@/pages/auth/verify-email-page.tsx"
 import { InboxPage } from "@/pages/inbox-page"
 import AddOrganizationForm from "@/pages/main/components/add-organizations-form"
 import CreateProjectForm from "@/pages/main/components/create-project-form"
-import MainPageNew from "@/pages/main/components/main-page-new"
 import OrganizationSettings from "@/pages/main/components/organization-settings"
 import MentionsPage from "@/pages/mentions-page"
 import NotFoundPage from "@/pages/not-found-page"
 import ResetPage from "@/pages/reset-pages/reset-page.tsx"
+import { SettingsIntegrationsPage } from "@/pages/settings-integrations"
 import CustomizationPage from "@/pages/settings-page/components/customization-page.tsx"
 import DeleteBotPage from "@/pages/settings-page/components/delete-bot-page.tsx"
-import InstallationPage from "@/pages/settings-page/components/installation-page.tsx"
-import IntegrationPage from "@/pages/settings-page/components/integration-page.tsx"
 import KnowledgePage from "@/pages/settings-page/components/knowledge-page.tsx"
 import ProjectSettigs from "@/pages/settings-page/components/project-settings"
 import { SettingsProfilePage } from "@/pages/settings-profile"
 import { SettingsUsersAndTeamsPage } from "@/pages/settings-users-and-teams"
+import { SettingsWidgetInstallationPage } from "@/pages/settings-widget-installation"
 import { DashboardLayout } from "@/widgets/dashboard"
 import { InboxLayout } from "@/widgets/inbox-layout"
 import { SettingsLayout } from "@/widgets/settings-layout"
@@ -94,15 +93,15 @@ export const routes: CustomRouteObject[] = [
           },
           {
             path: "installation",
-            element: <InstallationPage />
+            element: <SettingsWidgetInstallationPage />
           },
           {
             path: "customize",
             element: <CustomizationPage />
           },
           {
-            path: "integration",
-            element: <IntegrationPage />
+            path: "integrations",
+            element: <SettingsIntegrationsPage />
           },
           {
             path: "knowledge",
@@ -128,7 +127,7 @@ export const routes: CustomRouteObject[] = [
       </ProtectedRoute>
     ),
     children: [
-      { index: true, element: <MainPageNew /> },
+      { index: true, element: <Navigate to="/inbox" /> },
       { path: "create-organization", element: <AddOrganizationForm /> },
       { path: "settings", element: <OrganizationSettings /> },
       { path: "create-project", element: <CreateProjectForm /> }

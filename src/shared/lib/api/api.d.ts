@@ -707,6 +707,52 @@ export interface components {
       assignee?: string | null
       team?: number | null
     }
+    CurrentMember: {
+      /** Format: uuid */
+      readonly id: string
+      readonly project: components["schemas"]["CurrentProject"]
+      role?: components["schemas"]["Role87aEnum"]
+      /** Format: date-time */
+      readonly created_at: string
+      /** Format: date-time */
+      readonly updated_at: string
+      /** Format: uuid */
+      user: string
+      /** Format: uuid */
+      created_by?: string | null
+    }
+    CurrentProject: {
+      /** Format: uuid */
+      readonly id: string
+      name: string
+      /** Format: uuid */
+      collection?: string | null
+      readonly collection_name: string
+      use_cache?: boolean
+      use_annotation?: boolean
+      agent_switch?: boolean
+      /** Format: date-time */
+      readonly created_at: string
+      /** Format: date-time */
+      readonly updated_at: string
+    }
+    CurrentUser: {
+      /** Format: uuid */
+      readonly id: string
+      /** Format: email */
+      email: string
+      full_name: string
+      phone_number?: string | null
+      readonly team: components["schemas"]["Team"]
+      readonly team_id: number | null
+      readonly project_memberships: components["schemas"]["CurrentMember"][]
+      is_active?: boolean
+      is_staff?: boolean
+      /** Format: date-time */
+      readonly created_at: string
+      /** Format: date-time */
+      readonly updated_at: string
+    }
     /** @description Serializer for confirming a password reset attempt. */
     CustomPasswordResetConfirmRequest: {
       new_password1: string
@@ -750,7 +796,7 @@ export interface components {
       /** Format: uuid */
       project?: string | null
       team?: number | null
-      role?: components["schemas"]["InviteCreateRoleEnum"]
+      role?: components["schemas"]["Role87aEnum"]
     }
     InviteCreateRequest: {
       /** Format: email */
@@ -759,14 +805,8 @@ export interface components {
       /** Format: uuid */
       project?: string | null
       team?: number | null
-      role?: components["schemas"]["InviteCreateRoleEnum"]
+      role?: components["schemas"]["Role87aEnum"]
     }
-    /**
-     * @description * `ADMIN` - Admin
-     *     * `MEMBER` - Member
-     * @enum {string}
-     */
-    InviteCreateRoleEnum: "ADMIN" | "MEMBER"
     /** @description Serializer for JWT authentication. */
     JWT: {
       access: string
@@ -778,21 +818,27 @@ export interface components {
       email: string
       password: string
     }
+    Member: {
+      /** Format: uuid */
+      readonly id: string
+      user: components["schemas"]["User"]
+      role?: components["schemas"]["Role87aEnum"]
+      /** Format: date-time */
+      readonly created_at: string
+      /** Format: date-time */
+      readonly updated_at: string
+      /** Format: uuid */
+      project: string
+      /** Format: uuid */
+      created_by?: string | null
+    }
     MemberUpdate: {
-      role?: components["schemas"]["MemberUpdateRoleEnum"]
-      team?: number | null
+      role?: components["schemas"]["Role87aEnum"]
     }
     MemberUpdateRequest: {
-      role?: components["schemas"]["MemberUpdateRoleEnum"]
+      role?: components["schemas"]["Role87aEnum"]
       team?: number | null
     }
-    /**
-     * @description * `user` - User
-     *     * `admin` - Admin
-     *     * `super_admin` - Super Admin
-     * @enum {string}
-     */
-    MemberUpdateRoleEnum: "user" | "admin" | "super_admin"
     Message: {
       /** Format: uuid */
       readonly id: string
@@ -885,6 +931,21 @@ export interface components {
       previous?: string | null
       results: components["schemas"]["Invite"][]
     }
+    PaginatedMemberList: {
+      /** @example 123 */
+      count: number
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?offset=400&limit=100
+       */
+      next?: string | null
+      /**
+       * Format: uri
+       * @example http://api.example.org/accounts/?offset=200&limit=100
+       */
+      previous?: string | null
+      results: components["schemas"]["Member"][]
+    }
     PaginatedMessageList: {
       /** @example 123 */
       count: number
@@ -960,21 +1021,6 @@ export interface components {
       previous?: string | null
       results: components["schemas"]["TelegramIntegration"][]
     }
-    PaginatedUserList: {
-      /** @example 123 */
-      count: number
-      /**
-       * Format: uri
-       * @example http://api.example.org/accounts/?offset=400&limit=100
-       */
-      next?: string | null
-      /**
-       * Format: uri
-       * @example http://api.example.org/accounts/?offset=200&limit=100
-       */
-      previous?: string | null
-      results: components["schemas"]["User"][]
-    }
     PasswordChangeRequest: {
       new_password1: string
       new_password2: string
@@ -989,7 +1035,7 @@ export interface components {
       team?: number | null
     }
     PatchedMemberUpdateRequest: {
-      role?: components["schemas"]["MemberUpdateRoleEnum"]
+      role?: components["schemas"]["Role87aEnum"]
       team?: number | null
     }
     PatchedMessageCreateUpdateRequest: {
@@ -1026,6 +1072,7 @@ export interface components {
       /** Format: uuid */
       project?: string
       bot_api_token?: string
+      is_active?: boolean
     }
     PatchedUserUpdateRequest: {
       full_name?: string
@@ -1125,6 +1172,12 @@ export interface components {
       readonly detail: string
     }
     /**
+     * @description * `ADMIN` - Admin
+     *     * `MEMBER` - Member
+     * @enum {string}
+     */
+    Role87aEnum: "ADMIN" | "MEMBER"
+    /**
      * @description * `OPEN` - Open
      *     * `CLOSED` - Closed
      * @enum {string}
@@ -1159,12 +1212,13 @@ export interface components {
       /** Format: uuid */
       project: string
       bot_api_token: string
-      readonly is_active: boolean
+      is_active?: boolean
     }
     TelegramIntegrationRequest: {
       /** Format: uuid */
       project: string
       bot_api_token: string
+      is_active?: boolean
     }
     TokenRefresh: {
       readonly access: string
@@ -1362,7 +1416,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          "application/json": components["schemas"]["User"]
+          "application/json": components["schemas"]["CurrentUser"]
         }
       }
     }
@@ -1438,7 +1492,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          "application/json": components["schemas"]["PaginatedUserList"]
+          "application/json": components["schemas"]["PaginatedMemberList"]
         }
       }
     }
@@ -1460,7 +1514,7 @@ export interface operations {
           [name: string]: unknown
         }
         content: {
-          "application/json": components["schemas"]["User"]
+          "application/json": components["schemas"]["Member"]
         }
       }
     }

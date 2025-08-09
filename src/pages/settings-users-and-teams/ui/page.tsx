@@ -19,7 +19,11 @@ export const SettingsUsersAndTeamsPage: React.FC = () => {
 
   const project = projects?.results[0]
 
-  const { data: users, refetch: refetchUsers } = $api.useQuery(
+  const {
+    data: users,
+    isLoading: usersLoading,
+    refetch: refetchUsers
+  } = $api.useQuery(
     "get",
     "/api/v1/accounts/projects/{project_id}/members/",
     {
@@ -36,7 +40,11 @@ export const SettingsUsersAndTeamsPage: React.FC = () => {
 
   const { mutateAsync: mutateUserAsync } = $api.useMutation("patch", "/api/v1/accounts/projects/{project_id}/members/{id}/")
 
-  const { data: teams, refetch: refetchTeams } = $api.useQuery(
+  const {
+    data: teams,
+    isLoading: teamsLoading,
+    refetch: refetchTeams
+  } = $api.useQuery(
     "get",
     "/api/v1/accounts/projects/{project_id}/teams/",
     {
@@ -68,15 +76,17 @@ export const SettingsUsersAndTeamsPage: React.FC = () => {
     }).then(() => refetchUsers())
   }
 
-  const userColumns: GridColDef<components["schemas"]["User"]>[] = [
+  const userColumns: GridColDef<components["schemas"]["Member"]>[] = [
     {
       field: "full_name",
+      valueGetter: (_, row) => row.user.full_name,
       headerName: "Full name",
       flex: 2
     },
     {
       field: "phone_number",
       headerName: "Phone number",
+      valueGetter: (_, row) => row.user.phone_number,
       flex: 1
     },
     {
@@ -84,7 +94,7 @@ export const SettingsUsersAndTeamsPage: React.FC = () => {
       headerName: "Team",
       flex: 2,
       renderCell: ({ row }) => (
-        <Select<number> value={row?.team?.id ?? -1} size="small" fullWidth onChange={changeTeam(row.id)}>
+        <Select<number> value={row?.user?.team?.id ?? -1} size="small" fullWidth onChange={changeTeam(row.user.id)}>
           <MenuItem value={-1}>&lt;No team&gt;</MenuItem>
           {teams?.results.map(t => (
             <MenuItem key={t.id} value={t.id}>
@@ -111,8 +121,8 @@ export const SettingsUsersAndTeamsPage: React.FC = () => {
     }
   ]
 
-  if (!project || !users || !teams) {
-    return "Loading"
+  if (!project) {
+    return <>No project</>
   }
 
   return (
@@ -125,7 +135,7 @@ export const SettingsUsersAndTeamsPage: React.FC = () => {
           Invite new user
         </Button>
       </Stack>
-      <DataGrid columns={userColumns} rows={users.results} />
+      <DataGrid columns={userColumns} rows={users?.results} loading={usersLoading} />
 
       <Stack direction="row" spacing={1} justifyContent="space-between" alignItems="center">
         <Typography variant="h5">Teams</Typography>
@@ -133,9 +143,9 @@ export const SettingsUsersAndTeamsPage: React.FC = () => {
           Create new team
         </Button>
       </Stack>
-      <DataGrid columns={teamColumns} rows={teams.results} />
+      <DataGrid columns={teamColumns} rows={teams?.results} loading={teamsLoading} />
 
-      <InviteNewUser open={inviteUser} setOpen={setInviteUser} teams={teams.results} projectId={project.id} refetch={refetchUsers} />
+      <InviteNewUser open={inviteUser} setOpen={setInviteUser} teams={teams?.results ?? []} projectId={project.id} refetch={refetchUsers} />
       <CreateNewTeam open={newTeamModal} setOpen={setNewTeamModal} projectId={project.id} refetch={refetchTeams} />
     </Stack>
   )
